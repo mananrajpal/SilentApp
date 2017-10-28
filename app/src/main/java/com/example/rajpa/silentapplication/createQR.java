@@ -49,7 +49,7 @@ public class createQR extends AppCompatActivity {
 
     private void createQR()
     {
-        
+
     }
 
 }
