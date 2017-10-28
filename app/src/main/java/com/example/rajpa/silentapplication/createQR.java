@@ -10,14 +10,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
 import com.google.zxing.oned.MultiFormatOneDReader;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 public class createQR extends AppCompatActivity {
     String androidId;
+    ImageView qrHolder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,9 +39,11 @@ public class createQR extends AppCompatActivity {
         /*------------------------------------------------------------------------------------------*/
         //setting up objects with respective to their xml views.
         ActionBar myActionBar = getSupportActionBar();
+        TextView idHolder = (TextView)findViewById(R.id.deviceId);
         /*----------------------------------------------------------------------------------------*/
         myActionBar.setLogo(R.drawable.silent); //setting up the logo on ActionBar
         androidId = getAndroidId();
+        idHolder.setText(androidId);
         createQR();
 
         Log.d("Id-Testing", androidId);
@@ -49,7 +58,21 @@ public class createQR extends AppCompatActivity {
 
     private void createQR()
     {
-
+        //using an external library named zxing that takes in an string
+        //string is converted to Bitmap of Barcode
+        //that bitmap is set to an imageView
+        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+        try
+        {
+            BitMatrix bitMatrix = multiFormatWriter.encode(androidId, BarcodeFormat.QR_CODE,200,200);
+            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+            Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
+            qrHolder = (ImageView)findViewById(R.id.qrImage);
+            qrHolder.setImageBitmap(bitmap);
+        }catch(WriterException e)
+        {
+            e.printStackTrace();
+        }
     }
 
 }
