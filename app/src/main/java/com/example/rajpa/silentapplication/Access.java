@@ -1,5 +1,6 @@
 package com.example.rajpa.silentapplication;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,7 +25,7 @@ public class Access extends AppCompatActivity {
       /*------------------------------------------------------------------------------------------*/
         //setting up objects with respective to their xml views.
         ActionBar myActionBar = getSupportActionBar();
-        TextView studentAccess = (TextView)findViewById(R.id.StudentAccess);
+        final TextView studentAccess = (TextView)findViewById(R.id.StudentAccess);
         TextView staffAccess = (TextView)findViewById(R.id.StaffAccess);
         /*----------------------------------------------------------------------------------------*/
 
@@ -34,7 +35,8 @@ public class Access extends AppCompatActivity {
         studentAccess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Entering Student Access", Toast.LENGTH_LONG).show();
+                Intent studentIntent = new Intent(getApplicationContext() ,StudentAccess.class);
+                startActivity(studentIntent);
             }
         });
         staffAccess.setOnClickListener(new View.OnClickListener() {

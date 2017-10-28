@@ -4,10 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#ffffff">
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:id="@+id/my_toolbar"
+            android:background="#ffffff"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            android:popupTheme="@style/Theme.AppCompat.Light"/>
         <TableRow android:paddingTop="100sp">
             <ImageView
                 android:layout_width="0dp"
@@ -22,7 +31,7 @@
                 android:layout_weight="3"
                 android:text="@string/CreateQR" />
         </TableRow>
-        <TableRow android:paddingTop="50sp">
+        <TableRow android:paddingTop="20sp">
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -36,7 +45,7 @@
                 android:layout_weight="3"
                 android:text="@string/ScanDevices" />
         </TableRow>
-        <TableRow android:paddingTop="50sp">
+        <TableRow android:paddingTop="20sp">
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

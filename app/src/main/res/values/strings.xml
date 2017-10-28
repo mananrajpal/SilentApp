@@ -4,5 +4,5 @@
     <string name="StudentAccess">Student Access</string>
     <string name="CreateQR">Create QR</string>
     <string name="ScanDevices">Scan Nearby Devices..</string>
-    <string name="Challenge">Take Challenge of the Day</string>
+    <string name="Challenge">Take challenge of the day</string>
 </resources>
