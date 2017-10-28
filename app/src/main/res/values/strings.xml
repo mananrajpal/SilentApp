@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Silent Application</string>
+    <string name="StaffAccess">Staff Access</string>
+    <string name="StudentAccess">Student Access</string>
+    <string name="CreateQR">Create QR</string>
+    <string name="ScanDevices">Scan Nearby Devices..</string>
+    <string name="Challenge">Take Challenge of the Day</string>
+</resources>
