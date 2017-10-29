@@ -48,7 +48,6 @@ public class Access extends AppCompatActivity {
         staffAccess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Entering Staff Access", Toast.LENGTH_LONG).show();
                 Intent staffIntent = new Intent(getApplicationContext(), StaffAccess.class);
                 startActivity(staffIntent);
             }
@@ -105,6 +104,24 @@ public class Access extends AppCompatActivity {
         {
             //do nothing
         }
+        /*------------------this condition checks for getting acces to Internet------------------*/
+        if(ContextCompat.checkSelfPermission(Access.this, Manifest.permission.INTERNET)
+                !=PackageManager.PERMISSION_GRANTED)
+        {
+            if(ActivityCompat.shouldShowRequestPermissionRationale(Access.this, Manifest.permission.INTERNET))
+            {
+                ActivityCompat.requestPermissions(Access.this, new String[]{Manifest.permission.INTERNET},3);
+            }
+            else
+            {
+                ActivityCompat.requestPermissions(Access.this, new String[]{Manifest.permission.INTERNET},3);
+            }
+
+        }
+        else
+        {
+            //do nothing
+        }
 
 
     }
@@ -129,7 +146,7 @@ public class Access extends AppCompatActivity {
                 }
                 break;
             case 2:
-                if(grantResults.length>0 && grantResults[0]==PackageManager.PERMISSION_GRANTED)
+                if(grantResults.length>0 && grantResults[2]==PackageManager.PERMISSION_GRANTED)
                 {
                     if(ContextCompat.checkSelfPermission(Access.this, Manifest.permission.PROCESS_OUTGOING_CALLS)
                             ==PackageManager.PERMISSION_GRANTED)
@@ -137,6 +154,18 @@ public class Access extends AppCompatActivity {
                         Toast.makeText(Access.this, "Permission granted for outgoing calls", Toast.LENGTH_LONG).show();
                     }
                 }
+                break;
+            case 3:
+                if(grantResults.length>0 && grantResults[3]==PackageManager.PERMISSION_GRANTED)
+                {
+                    if(ContextCompat.checkSelfPermission(Access.this, Manifest.permission.INTERNET)
+                            ==PackageManager.PERMISSION_GRANTED)
+                    {
+                        Toast.makeText(Access.this, "Permission granted for Internet", Toast.LENGTH_LONG).show();
+                    }
+                }
+                break;
+
         }
     }
 }

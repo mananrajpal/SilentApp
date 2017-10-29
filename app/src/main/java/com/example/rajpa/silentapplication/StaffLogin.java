@@ -14,6 +14,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 public class StaffLogin extends Fragment {
     Boolean validated = false;
     loginListener mListener;
@@ -75,6 +78,7 @@ public class StaffLogin extends Fragment {
                 }
                 else
                 {
+                    //performing the async threading of getting records from database
                     BackgroundWorker br = new BackgroundWorker(v);
                     br.execute(type, userName,userPass);
                 }
@@ -86,56 +90,5 @@ public class StaffLogin extends Fragment {
 
         return v;
     }
-
-    private void validateData(String name, String pass, View v)
-    {
-
-    }
-
-    class BackgroundWorker extends AsyncTask<String, Void, Void>
-    {
-        View v;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
-        }
-
-        @Override
-        protected Void doInBackground(String... params) {
-            //getting the operation type
-            String type = params[0];
-            if(type=="login")
-            {
-
-            }
-
-            return null;
-        }
-
-        public BackgroundWorker(View context)
-        {
-            v = context;
-        }
-
-    }
-
-
-
-
-
-
-
-
 
 }
