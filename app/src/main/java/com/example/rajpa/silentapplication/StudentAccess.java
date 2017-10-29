@@ -43,7 +43,8 @@ public class StudentAccess extends AppCompatActivity {
         scanDevices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent myIntent = new Intent (getApplicationContext(), ViewDevices.class);
+                startActivity(myIntent);
             }
         });
         challenge.setOnClickListener(new View.OnClickListener() {
