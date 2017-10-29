@@ -49,6 +49,8 @@ public class Access extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getApplicationContext(), "Entering Staff Access", Toast.LENGTH_LONG).show();
+                Intent staffIntent = new Intent(getApplicationContext(), StaffAccess.class);
+                startActivity(staffIntent);
             }
         });
 
