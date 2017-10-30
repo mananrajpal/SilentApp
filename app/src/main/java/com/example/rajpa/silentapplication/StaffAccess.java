@@ -10,6 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 public class StaffAccess extends AppCompatActivity implements StaffLogin.loginListener {
@@ -27,6 +30,27 @@ public class StaffAccess extends AppCompatActivity implements StaffLogin.loginLi
         Toolbar myToolbar = (Toolbar)findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         initializeUI();
+    }
+
+    //Inflating Main Menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater mn = getMenuInflater();
+        mn.inflate(R.menu.staffmenu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case R.id.scanQr:
+                Toast.makeText(getApplicationContext(), "Please get the QR ready to be scanned.", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.resetComplaints:
+                Toast.makeText(getApplicationContext(), "Please get the Device-id ready for input.", Toast.LENGTH_LONG).show();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void initializeUI()

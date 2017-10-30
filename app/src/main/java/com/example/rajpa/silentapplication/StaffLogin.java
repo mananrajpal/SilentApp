@@ -73,8 +73,15 @@ public class StaffLogin extends Fragment
         checkCredentials.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onClick(View v) {
-
+            public void onClick(View v)
+            {
+                /*https://www.youtube.com/watch?v=3-ShLEjktq8
+                * This code has been learned and implemented from this youtube video
+                * This part checks if the Connectivity Manager is instantiated, if yes
+                * It gets the status of the network using method getActiveNetworkInfo
+                * The method brings with it the current state of the network.
+                * It checks if the network is connected then the async task is performed,
+                * database connection is performed then*/
                 ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Service.CONNECTIVITY_SERVICE);
                 if(connectivityManager != null)
                 {
@@ -165,6 +172,19 @@ public class StaffLogin extends Fragment
                 String username = params[1];
                 String password = params[2];
                 Log.d("Checking-connection","Inside the connection");
+                /*This code has been learned and implemented from https://www.youtube.com/watch?v=eldh8l8yPew
+                * This code converts the string url to actual url
+                * HTTP connection is opened using the url created,
+                * Output, Input is set to true on that http connection,
+                * An output stream is created instantiated with the http outputstream
+                * In order to write to output stream a buffered writer is created
+                * As the php taken in UTF-8 type string the data is encoded in UTF-8,
+                * PHP variables takes the value from the url so variables are attached to the post data
+                * All the connections are then closed except the httpURLConnection,
+                * this connection is used again to read the echo's from the php file
+                * An InputStream is instantiated with httpURLInputStream.
+                * That input stream is read using the BufferReader and the result is then returned,
+                * which is then read in the post execute override method*/
                 try
                 {
                     URL url = new URL(login_url); //basic url created from the string.
