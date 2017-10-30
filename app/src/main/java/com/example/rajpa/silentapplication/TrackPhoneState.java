@@ -15,10 +15,14 @@ import android.widget.Toast;
 
 public class TrackPhoneState extends BroadcastReceiver {
     String state;
-
+    static String phoneSate = "Idle";
     public TrackPhoneState()
     {
 
+    }
+    public String getPhoneSate()
+    {
+        return phoneSate;
     }
 
     @Override
@@ -32,23 +36,27 @@ public class TrackPhoneState extends BroadcastReceiver {
             {
                 //checks if the state is null i.e. an outgoing call is being made
                 Log.d("Testing-call","Outgoing call");
+                phoneSate = "Outgoing";
                 Toast.makeText(context,"Outgoing Call",Toast.LENGTH_LONG).show();
             }
             else if(state.equals(TelephonyManager.EXTRA_STATE_RINGING))
             {
                 //checks if the state is ringing i.e. an incoming call
                 Log.d("Testing-call", "Incoming call");
+                phoneSate="Incoming";
                 Toast.makeText(context,"Incoming Call",Toast.LENGTH_LONG).show();
             }
             else if(state.equals(TelephonyManager.EXTRA_STATE_IDLE))
             {
                 //checks if the phone is idle
                 Toast.makeText(context, "Phone on idle",Toast.LENGTH_LONG).show();
+                phoneSate="Idle";
             }
             else if(state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK))
             {
                 //checks if user accepted the incoming call
                 Toast.makeText(context, "Received Phone", Toast.LENGTH_LONG).show();
+                phoneSate= "On Call";
             }
         }catch(Exception e)
         {

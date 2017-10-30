@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class StudentAccess extends AppCompatActivity {
 
@@ -30,13 +31,21 @@ public class StudentAccess extends AppCompatActivity {
         /*----------------------------------------------------------------------------------------*/
 
         myActionBar.setLogo(R.drawable.silent); //setting up the logo on ActionBar
-
         /*Setting up the onClickListener for respective text fields.*/
         createQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent myIntent = new Intent(getApplicationContext(),createQR.class);
-                startActivity(myIntent);
+                CheckInternetState checkInternetState = new CheckInternetState(view);
+                if(checkInternetState.getSate()==true)
+                {
+                    Intent myIntent = new Intent(getApplicationContext(),createQR.class);
+                    startActivity(myIntent);
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(),
+                            "Please connect to the Internet",Toast.LENGTH_LONG).show();
+                }
             }
         });
 
