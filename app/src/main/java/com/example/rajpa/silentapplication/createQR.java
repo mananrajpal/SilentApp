@@ -40,9 +40,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class createQR extends AppCompatActivity {
-    String androidId;
+    static String androidId;
     ImageView qrHolder;
     String phoneState;
+    static Boolean createdOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,15 @@ public class createQR extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
         initializeUI();
+    }
+
+    public String getDeviceId()
+    {
+        return androidId;
+    }
+    public Boolean getSignal()
+    {
+        return createdOnce;
     }
 
     private void initializeUI()
@@ -112,6 +122,7 @@ public class createQR extends AppCompatActivity {
         /*------------------------------------------------*/
         RegisterThread rT = new RegisterThread();
         rT.execute(androidId,phoneState, date, time);
+        createdOnce = true;
 
     }
 
