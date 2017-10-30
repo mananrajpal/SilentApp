@@ -75,54 +75,42 @@ public class StaffLogin extends Fragment
             @Override
             public void onClick(View v)
             {
-                /*https://www.youtube.com/watch?v=3-ShLEjktq8
-                * This code has been learned and implemented from this youtube video
-                * This part checks if the Connectivity Manager is instantiated, if yes
-                * It gets the status of the network using method getActiveNetworkInfo
-                * The method brings with it the current state of the network.
-                * It checks if the network is connected then the async task is performed,
-                * database connection is performed then*/
-                ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Service.CONNECTIVITY_SERVICE);
-                if(connectivityManager != null)
+                CheckInternetState stateChecker = new CheckInternetState(v);
+                if(stateChecker.getSate()==true)
                 {
-                    NetworkInfo info = connectivityManager.getActiveNetworkInfo();
-                    if(info != null)
+                    /*-------------------------getting the associated views from xml file---------*/
+                    EditText nameEntered = (EditText) getActivity().findViewById(R.id.userName);
+                    EditText passEntered = (EditText) getActivity().findViewById(R.id.userPass);
+                    /*------------------------Converting the input to string----------------------*/
+                    String userName = nameEntered.getText().toString();
+                    String userPass = passEntered.getText().toString();
+                    String type = "login"; //Operation type is login
+                    /*----------------------------------------------------------------------------*/
+                    /*--------------------Validating data using TextUtils Library-----------------*/
+                    if(TextUtils.isEmpty(userName))
                     {
-                        if(info.getState()  == NetworkInfo.State.CONNECTED)
-                        {
-                            /*-----------------getting the associated views from xml file---------*/
-                            EditText nameEntered = (EditText) getActivity().findViewById(R.id.userName);
-                            EditText passEntered = (EditText) getActivity().findViewById(R.id.userPass);
-                        /*--------------------Converting the input to string----------------------*/
-                            String userName = nameEntered.getText().toString();
-                            String userPass = passEntered.getText().toString();
-                            String type = "login"; //Operation type is login
-                        /*------------------------------------------------------------------------*/
-                         /*---------------Validating data using TextUtils Library-----------------*/
-                            if(TextUtils.isEmpty(userName))
-                            {
-                                nameEntered.setError("Enter name");
-                                return;
-                            }
-                            if(TextUtils.isEmpty(userPass))
-                            {
-                                passEntered.setError("Enter password");
-                                return;
-                            }
-                            else
-                            {
-                                //performing the async threading of getting records from database
-                                BackgroundWorker br = new BackgroundWorker();
-                                br.execute(type, userName,userPass);
-                            }
-                        }
+                        nameEntered.setError("Enter name");
+                        return;
+                    }
+                    if(TextUtils.isEmpty(userPass))
+                    {
+                        passEntered.setError("Enter password");
+                        return;
                     }
                     else
                     {
-                        Toast.makeText(getActivity(),"Please connect to Internet",Toast.LENGTH_LONG).show();
+                        //performing the async threading of getting records from database
+                        BackgroundWorker br = new BackgroundWorker();
+                        br.execute(type, userName,userPass);
                     }
+
+                }
+                else
+                {
+                    Toast.makeText(getActivity(),"Please connect to Internet",Toast.LENGTH_LONG).show();
                 }
             }
+
         });
         return v;
     }

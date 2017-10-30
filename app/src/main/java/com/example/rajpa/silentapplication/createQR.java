@@ -1,6 +1,9 @@
 package com.example.rajpa.silentapplication;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
@@ -52,7 +55,10 @@ public class createQR extends AppCompatActivity {
     private String getAndroidId()
     {
         String id;
-        id = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        WifiManager manager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        WifiInfo info = manager.getConnectionInfo();
+        id = info.getMacAddress();
+        //Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
         return id;
     }
 

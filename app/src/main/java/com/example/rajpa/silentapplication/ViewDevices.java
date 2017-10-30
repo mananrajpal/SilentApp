@@ -31,12 +31,16 @@ public class ViewDevices extends AppCompatActivity{
 
         //setting the logo of the application on the action bar
         myBar.setLogo(R.drawable.silent);
-        createBluetooth();
+        createBluetooth(); //checks if bluetooth is turned on
 
 
     }
     private void createBluetooth()
     {
+
+        /*Code reference - https://developer.android.com/guide/topics/connectivity/bluetooth.html
+        * Created a bluetooth adapter and checks if it is not enabled creates an intent to turned
+        * the bluetooth on.*/
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if(mBluetoothAdapter==null)
         {
