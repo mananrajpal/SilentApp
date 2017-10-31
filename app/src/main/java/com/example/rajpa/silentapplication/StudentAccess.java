@@ -1,5 +1,6 @@
 package com.example.rajpa.silentapplication;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -10,7 +11,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class StudentAccess extends AppCompatActivity {
-
+    BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+    Integer REQUEST_ENABLE_BT=1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +34,18 @@ public class StudentAccess extends AppCompatActivity {
 
         myActionBar.setLogo(R.drawable.silent); //setting up the logo on ActionBar
         /*Setting up the onClickListener for respective text fields.*/
+        if(mBluetoothAdapter==null)
+        {
+            Toast.makeText(getApplicationContext(),"Your mobile does not support bluetooth",Toast.LENGTH_LONG).show();
+        }
+        if(!mBluetoothAdapter.isEnabled())
+        {
+            Intent myIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(myIntent, REQUEST_ENABLE_BT);
+        }
+        Intent makeDeviceDiscoverable = new Intent(mBluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+        makeDeviceDiscoverable.putExtra(mBluetoothAdapter.EXTRA_DISCOVERABLE_DURATION,0);
+        startActivityForResult(makeDeviceDiscoverable,2);
         createQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
