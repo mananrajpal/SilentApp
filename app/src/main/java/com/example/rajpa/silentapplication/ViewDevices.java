@@ -47,8 +47,6 @@ public class ViewDevices extends AppCompatActivity{
         //setting the logo of the application on the action bar
         myBar.setLogo(R.drawable.silent);
         createBluetooth();//checks if bluetooth is turned on
-        ExploreDevices ex = new ExploreDevices();
-        ex.execute();
 
 
 
@@ -68,6 +66,11 @@ public class ViewDevices extends AppCompatActivity{
             Intent myIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(myIntent, REQUEST_ENABLE_BT);
         }
+        if(mBluetoothAdapter.isEnabled())
+        {
+            ExploreDevices ex = new ExploreDevices();
+            ex.execute();
+        }
     }
 
     @Override
@@ -75,7 +78,8 @@ public class ViewDevices extends AppCompatActivity{
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQUEST_ENABLE_BT && resultCode == RESULT_OK)
         {
-            Toast.makeText(getApplicationContext(),"Bluetooth Turned On Successfully.",Toast.LENGTH_LONG).show();
+            ExploreDevices ex = new ExploreDevices();
+            ex.execute();
         }
         else
         {
@@ -92,6 +96,7 @@ public class ViewDevices extends AppCompatActivity{
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            Toast.makeText(getApplicationContext(),"Searching for Devices",Toast.LENGTH_LONG).show();
             Log.d("Bluetooth-tracking","Inside onPreExecute");
             isActivityStarted = false;
             isActivityFinsihed= false;
