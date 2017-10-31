@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.support.v7.widget.ListViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -100,7 +101,6 @@ public class ViewDevices extends AppCompatActivity{
             Log.d("Bluetooth-tracking","Inside onPreExecute");
             isActivityStarted = false;
             isActivityFinsihed= false;
-            pb.setMax(3);
             devicesFound = 0;
             if(mBluetoothAdapter.isDiscovering())
             {
@@ -131,6 +131,7 @@ public class ViewDevices extends AppCompatActivity{
             Log.d("Bluetooth-tracking","Inside the Post Execute");
             Log.d("Bluetooth-tracking","Size:"+ bluetoothDevices.size());
             ListView myList = (ListView)findViewById(R.id.devicesList);
+            pb.setVisibility(View.INVISIBLE);
             DevicesListAdapter adapter = new DevicesListAdapter(getApplicationContext(), bluetoothDevices);
             myList.setAdapter(adapter);
             super.onPostExecute(bluetoothDevices);
@@ -138,7 +139,7 @@ public class ViewDevices extends AppCompatActivity{
 
         @Override
         protected void onProgressUpdate(Integer... values) {
-            pb.setProgress(values[0]);
+           // pb.setProgress(values[0]);
             super.onProgressUpdate(values);
         }
 
@@ -151,7 +152,7 @@ public class ViewDevices extends AppCompatActivity{
             {
                 if(isActivityStarted)
                 {
-                    publishProgress(listBluetoothDevices.size());
+                   // publishProgress(listBluetoothDevices.size());
                 }
             }
             if(isActivityFinsihed)
