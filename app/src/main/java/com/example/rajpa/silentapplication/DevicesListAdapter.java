@@ -29,11 +29,13 @@ public class DevicesListAdapter extends ArrayAdapter<BluetoothDevices>
     List<BluetoothDevices> bluetoothDevices;
     public DevicesListAdapter(@NonNull Context context, List<BluetoothDevices> deviceList) {
         super(context,0, deviceList);
-        bluetoothDevices = deviceList;
+        bluetoothDevices = deviceList; //takes in the deviceList passed from async task in ViewDevices class
 
     }
     static class Holder
     {
+        //using a holder class which takes does not does the find by id operations making the views much more recyclable
+        //and makes the code faster.
         TextView deviceName;
         ImageView constImage;
     }
@@ -45,6 +47,7 @@ public class DevicesListAdapter extends ArrayAdapter<BluetoothDevices>
         Holder holder;
         if(listItem == null)
         {
+            //this condition checks if there is no spare view to populate the list item and creates a new one
             listItem = LayoutInflater.from(getContext()).inflate(R.layout.customrow, parent, false);
             holder = new Holder();
             holder.deviceName = (TextView)listItem.findViewById(R.id.onCallDevices);
@@ -53,8 +56,10 @@ public class DevicesListAdapter extends ArrayAdapter<BluetoothDevices>
         }
         else
         {
+            //else it uses the associated list item i.e. the non used on to populate the list item.
             holder = (Holder)listItem.getTag();
         }
+        //takes in the current bluetooth device in the list and updates on the view.
         BluetoothDevices device = bluetoothDevices.get(position);
         holder.deviceName.setText(device.getName());
         Log.d("Bluetooth-tracking",device.getName());

@@ -20,6 +20,13 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,20 +97,22 @@ public class ViewDevices extends AppCompatActivity{
 
     class ExploreDevices extends AsyncTask<Void, Integer, List<BluetoothDevices>>
     {
-        Boolean isActivityStarted;
-        Boolean isActivityFinsihed;
-        Integer devicesFound;
-        ProgressBar pb = (ProgressBar) findViewById(R.id.progressBar);
+        Boolean isActivityStarted; //boolean value that detects if the scanning started.
+        Boolean isActivityFinsihed;//condition to keep the background part keep running until listener reports Scanning finished
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            //initiates all the values to default.
             Toast.makeText(getApplicationContext(),"Searching for Devices",Toast.LENGTH_LONG).show();
             Log.d("Bluetooth-tracking","Inside onPreExecute");
             isActivityStarted = false;
             isActivityFinsihed= false;
-            devicesFound = 0;
             if(mBluetoothAdapter.isDiscovering())
             {
+                /*This condition checks if the bluetooth device was already in discovery mode,
+                * if yes it disables it first which is a good practice and then turns it on again.
+                * Three intents are created one to get status if scanning started, second to get
+                * status if the scanning is finished and last to check how many devices were found.*/
                 Log.d("Bluetooth-tracking","Inside if condition of was Discovering");
                 //making sure bluetooth discovery is cancelled before starting to discover again.
                 mBluetoothAdapter.cancelDiscovery();
@@ -130,10 +139,7 @@ public class ViewDevices extends AppCompatActivity{
         protected void onPostExecute(List<BluetoothDevices> bluetoothDevices) {
             Log.d("Bluetooth-tracking","Inside the Post Execute");
             Log.d("Bluetooth-tracking","Size:"+ bluetoothDevices.size());
-            ListView myList = (ListView)findViewById(R.id.devicesList);
-            pb.setVisibility(View.INVISIBLE);
-            DevicesListAdapter adapter = new DevicesListAdapter(getApplicationContext(), bluetoothDevices);
-            myList.setAdapter(adapter);
+            new GetValidatedList(bluetoothDevices).execute();
             super.onPostExecute(bluetoothDevices);
         }
 
@@ -146,8 +152,15 @@ public class ViewDevices extends AppCompatActivity{
         @Override
         protected List<BluetoothDevices> doInBackground(Void... params) {
             Log.d("Bluetooth-tracking","Inside background override before starting discovery");
+            //startDiscovery is an async method that put the device is discoverable mode and looks
+            //for other devices to get their name and MAC address.
             mBluetoothAdapter.startDiscovery();
             Log.d("Bluetooth-tracking","Status of validation"+isActivityFinsihed);
+            /*startDiscovery async method depends on its listeners to get appropriate status of the
+            * scanning process but threads don't considers those callbacks so had to implement a
+            * while loop with logic such that it will keep the thread occupied until the listener
+            * reports that the scanning is complete i.e. devices list has been updated which then
+            * takes it to the post method.*/
             while(isActivityFinsihed == false)
             {
                 if(isActivityStarted)
@@ -164,6 +177,8 @@ public class ViewDevices extends AppCompatActivity{
         }
 
         /*----------------Creating the BroadcastReceiver to get the appropriate-------------------*/
+
+        /*This broadcast receiver checks if the scanning is started on device.*/
         private BroadcastReceiver actionStarted = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -176,6 +191,7 @@ public class ViewDevices extends AppCompatActivity{
             }
         };
 
+        /*This broadcast receiver checks if the scanning is finished on device.*/
         private BroadcastReceiver actionFinished = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -188,6 +204,7 @@ public class ViewDevices extends AppCompatActivity{
             }
         };
 
+        /*This broadcast receiver checks if the scanning has found a device.*/
         private BroadcastReceiver deviceFoundAction = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -203,5 +220,82 @@ public class ViewDevices extends AppCompatActivity{
         };
 
         /*---------------------------------------------------------------------------------------*/
+    }
+
+
+
+
+    class GetValidatedList extends AsyncTask<String, Void, String>
+    {
+        List<BluetoothDevices>myDevices;
+        List<BluetoothDevices>devicesOnCall = new ArrayList<BluetoothDevices>();
+        ProgressBar pb = (ProgressBar) findViewById(R.id.progressBar);
+
+        public GetValidatedList(List<BluetoothDevices> br)
+        {
+            myDevices = br;
+        }
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            ListView myList = (ListView)findViewById(R.id.devicesList);//gets the associated listview to be populated
+            pb.setVisibility(View.INVISIBLE);//sets the progress bar to invisible once the list is populated.
+            DevicesListAdapter adapter = new DevicesListAdapter(getApplicationContext(), devicesOnCall);
+            //sets the adapter to the defined list view.
+            myList.setAdapter(adapter);
+            Log.d("Bluetooth-tracking", s);
+
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String website = "http://discoloured-pops.000webhostapp.com/GetDeviceOnCall.php";
+            try
+            {
+                URL url = new URL(website);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+                InputStream inputStream = httpURLConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                String result="", line="";
+                while((line = bufferedReader.readLine())!=null)
+                {
+                    result += line;
+                    for(int i=0; i< myDevices.size();i++)
+                    {
+                        if(myDevices.get(i).getMacAddress().equals(line))
+                        {
+                            Log.d("Bluetooth-tracking","Inside the checking condition");
+                            Log.d("Bluetooth-tracking",myDevices.get(i).getName()+myDevices.get(i).getMacAddress());
+                            devicesOnCall.add(new BluetoothDevices(myDevices.get(i).getName(),myDevices.get(i).getMacAddress()));
+                        }
+                    }
+                }
+                bufferedReader.close();
+                inputStream.close();
+                httpURLConnection.disconnect();
+                return result;
+            }catch (MalformedURLException e)
+            {
+
+            }
+            catch(IOException e)
+            {
+
+            }
+
+            return null;
+        }
     }
 }

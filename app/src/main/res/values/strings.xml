@@ -6,7 +6,7 @@
     <string name="ScanDevices">Scan Nearby Devices..</string>
     <string name="Challenge">Take challenge of the day</string>
     <string name="title_activity_create_qr">createQR</string>
-    <string name="bluetoothDevice">Devices found nearby..</string>
+    <string name="bluetoothDevice">Devices On Call</string>
 
     <!--Login Page Strings-->
     <string name="loginName">Name:</string>
