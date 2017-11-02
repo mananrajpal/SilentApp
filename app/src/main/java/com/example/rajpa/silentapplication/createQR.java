@@ -1,5 +1,6 @@
 package com.example.rajpa.silentapplication;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.wifi.WifiInfo;
@@ -41,6 +42,7 @@ import java.util.Calendar;
 
 public class createQR extends AppCompatActivity {
     static String androidId;
+    BluetoothAdapter mAdapter = BluetoothAdapter.getDefaultAdapter();
     ImageView qrHolder;
     String phoneState;
     static Boolean createdOnce = false;
@@ -84,7 +86,8 @@ public class createQR extends AppCompatActivity {
         String id;
         WifiManager manager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         WifiInfo info = manager.getConnectionInfo();
-        id = info.getMacAddress();
+        //id = info.getMacAddress();
+        id = mAdapter.getAddress();
         //Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
         return id;
     }

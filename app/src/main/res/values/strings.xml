@@ -19,6 +19,11 @@
     <string name="scanQr">Scan Qr</string>
     <string name="resetComplaints">Reset Complaints</string>
 
+    <!--Complaint Page Strings-->
+    <string name="nudgeDevice">Nudge the Device</string>
+    <string name="reportDevice">Report the Device</string>
+    <string name="reportText">Actions Available-</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

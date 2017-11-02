@@ -16,6 +16,7 @@ import android.support.v7.widget.ListViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -30,11 +31,18 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewDevices extends AppCompatActivity{
+public class ViewDevices extends AppCompatActivity implements ComplaintPage.complaintListener{
     Integer REQUEST_ENABLE_BT = 1;
     BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     ArrayList<BluetoothDevices> listBluetoothDevices = new ArrayList<BluetoothDevices>();
+    List<BluetoothDevices>devicesOnCall = new ArrayList<BluetoothDevices>();
+
     DevicesListAdapter adapter;
+
+    @Override
+    public void getStatus(String s) {
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,14 +58,22 @@ public class ViewDevices extends AppCompatActivity{
     {
         /*------------------------Associating objects with their views----------------------------*/
         ActionBar myBar = getSupportActionBar();
+        ListView listView = (ListView)findViewById(R.id.devicesList);
         /*----------------------------------------------------------------------------------------*/
 
         //setting the logo of the application on the action bar
         myBar.setLogo(R.drawable.silent);
         createBluetooth();//checks if bluetooth is turned on
-
-
-
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ComplaintPage cl = new ComplaintPage();
+                cl.setDevies(devicesOnCall, position);
+                FragmentTransaction fr = getFragmentManager().beginTransaction();
+                fr.replace(R.id.complaintFragment, cl);
+                fr.commit();
+            }
+        });
     }
     private void createBluetooth()
     {
@@ -228,7 +244,6 @@ public class ViewDevices extends AppCompatActivity{
     class GetValidatedList extends AsyncTask<String, Void, String>
     {
         List<BluetoothDevices>myDevices;
-        List<BluetoothDevices>devicesOnCall = new ArrayList<BluetoothDevices>();
         ProgressBar pb = (ProgressBar) findViewById(R.id.progressBar);
 
         public GetValidatedList(List<BluetoothDevices> br)
@@ -271,9 +286,11 @@ public class ViewDevices extends AppCompatActivity{
                 String result="", line="";
                 while((line = bufferedReader.readLine())!=null)
                 {
+                    Log.d("Mac-comparison",line);
                     result += line;
                     for(int i=0; i< myDevices.size();i++)
                     {
+                        Log.d("Mac-comparison",myDevices.get(i).getMacAddress());
                         if(myDevices.get(i).getMacAddress().equals(line))
                         {
                             Log.d("Bluetooth-tracking","Inside the checking condition");

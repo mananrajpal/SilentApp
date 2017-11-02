@@ -64,6 +64,14 @@ public class TrackPhoneState extends BroadcastReceiver {
                 //checks if the phone is idle
                 Toast.makeText(context, "Phone on idle",Toast.LENGTH_LONG).show();
                 phoneSate="Idle";
+                createQR qrCreator = new createQR();
+                if(qrCreator.getSignal()==true)
+                {
+                    String deviceId= qrCreator.getDeviceId();
+                    UpdateState updateState = new UpdateState(context);
+                    Log.d("Check-update","Inside the if condition"+phoneSate);
+                    updateState.execute(deviceId, phoneSate);
+                }
             }
             else if(state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK))
             {

@@ -33,19 +33,32 @@ public class StudentAccess extends AppCompatActivity {
         /*----------------------------------------------------------------------------------------*/
 
         myActionBar.setLogo(R.drawable.silent); //setting up the logo on ActionBar
-        /*Setting up the onClickListener for respective text fields.*/
+
+
+        /*------------------------Making the device discoverable to other devices-----------------*/
         if(mBluetoothAdapter==null)
         {
+            //checks if the adapter status is null i.e. the device does not have bluetooth support
             Toast.makeText(getApplicationContext(),"Your mobile does not support bluetooth",Toast.LENGTH_LONG).show();
         }
-        if(!mBluetoothAdapter.isEnabled())
+        else if(!mBluetoothAdapter.isEnabled())
         {
+            //if the bluetooth is not enabled it enables in with the help of intent
+            //action request enable
             Intent myIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(myIntent, REQUEST_ENABLE_BT);
         }
+        //After making sure bluetooth is enabled device is made discoverable to other devices.
+        //At the moment device is discoverable for unlimited time.
+        //For future the device will be undiscoverabe when the user scans the QR again while
+        //exiting the Silent Area
         Intent makeDeviceDiscoverable = new Intent(mBluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
         makeDeviceDiscoverable.putExtra(mBluetoothAdapter.EXTRA_DISCOVERABLE_DURATION,0);
         startActivityForResult(makeDeviceDiscoverable,2);
+
+        /*----------------------------------------------------------------------------------------*/
+
+        /*Setting up the onClickListener for respective text fields.*/
         createQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
