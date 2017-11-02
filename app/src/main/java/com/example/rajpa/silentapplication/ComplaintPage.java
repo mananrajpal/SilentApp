@@ -60,6 +60,7 @@ public class ComplaintPage extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        Log.d("Fragment-error","Inside the onCreateView method of fragment");
         View v= inflater.inflate(R.layout.fragment_complaint_page, container, false);
         TextView nudgeDevice = (TextView) v.findViewById(R.id.nudgeDevice);
         TextView reportDevice = (TextView) v.findViewById(R.id.reportDevice);
@@ -73,7 +74,9 @@ public class ComplaintPage extends Fragment {
         reportDevice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("Fragment-error","Inside the onClick Listener");
                 ReportWorker reportWorker = new ReportWorker(v);
+                reportWorker.execute();
             }
         });
         return v;
@@ -96,7 +99,7 @@ public class ComplaintPage extends Fragment {
     class ReportWorker extends AsyncTask<Void,Void,String>
     {
         View view;
-        ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.reportBar);
+        ProgressBar progressBar = (ProgressBar) getActivity().findViewById(R.id.reportBar);
         String website = "http://discoloured-pops.000webhostapp.com/ReportDevice.php";
         public ReportWorker(View v)
         {
@@ -104,12 +107,14 @@ public class ComplaintPage extends Fragment {
         }
         @Override
         protected void onPreExecute() {
+            Log.d("Fragment-error","Inside the preExecute Method of async");
             progressBar.setVisibility(View.VISIBLE);
             super.onPreExecute();
         }
 
         @Override
         protected void onPostExecute(String s) {
+            Log.d("Fragment-error","Inside the onPostExectue method");
             progressBar.setVisibility(View.INVISIBLE);
             if(s.equals("Success"))
             {
@@ -126,6 +131,7 @@ public class ComplaintPage extends Fragment {
         protected String doInBackground(Void... params) {
             try
             {
+                Log.d("Fragment-error","Inside doInBackground Method");
                 URL url = new URL(website);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setDoInput(true);
@@ -146,6 +152,7 @@ public class ComplaintPage extends Fragment {
                     Log.d("Checking-reporting", line);
                     result += line;
                 }
+                return result;
 
             }catch (MalformedURLException e)
             {
