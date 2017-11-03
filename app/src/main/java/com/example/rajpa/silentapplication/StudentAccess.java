@@ -134,6 +134,14 @@ public class StudentAccess extends AppCompatActivity {
         else
             task.execute();
     }
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private void StartResetNudgeInParallel(Resetnudge task) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        else
+            task.execute();
+    }
+
 
     class CheckNudge extends AsyncTask<Void, Void, String>
     {
@@ -152,7 +160,9 @@ public class StudentAccess extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             Toast.makeText(getApplicationContext(),"Please End the Call, neighbour is getting disturbed", Toast.LENGTH_LONG).show();
-            v.vibrate(1000);
+            v.vibrate(1500);
+            Resetnudge resetnudge = new Resetnudge();
+            StartResetNudgeInParallel(resetnudge);
         }
 
         @Override
@@ -208,6 +218,72 @@ public class StudentAccess extends AppCompatActivity {
                 return result;
             }
 
+            return null;
+        }
+    }
+
+    class Resetnudge extends AsyncTask<Void, Void, String>
+    {
+        String website;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Log.d("Nudge-checking","Inside the preexecute of ResetNudge");
+            website = "http://discoloured-pops.000webhostapp.com/ResetNudge.php";
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Log.d("Nudge-checking","Inside the postexecute of ResetNudge");
+            CheckNudge checkNudge = new CheckNudge();
+            StartAsyncTaskInParallel(checkNudge);
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            try
+            {
+                Log.d("Nudge-checking","Inside the doInBackground of ResetNudge");
+                URL url = new URL(website);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.setDoOutput(true);
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                String post_data = URLEncoder.encode("deviceId","UTF-8")+"=" +
+                        URLEncoder.encode(mBluetoothAdapter.getAddress(),"UTF-8");
+                bufferedWriter.write(post_data);
+                bufferedWriter.flush();
+                outputStream.close();
+                bufferedWriter.close();
+                InputStream inputStream = httpURLConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+                String result = "",line = "";
+                while ((line= bufferedReader.readLine())!=null)
+                {
+                    Log.d("Nudge-checking","Reset-nudge result:"+line);
+                    result = line;
+                }
+                return result;
+
+            }catch (MalformedURLException e)
+            {
+                e.printStackTrace();
+            }catch (IOException e)
+            {
+                e.printStackTrace();
+            }
             return null;
         }
     }
