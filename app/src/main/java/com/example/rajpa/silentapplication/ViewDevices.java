@@ -111,6 +111,10 @@ public class ViewDevices extends AppCompatActivity implements ComplaintPage.comp
         }
     }
 
+    /*This async task starts three different intents i.e. startBluetooth, finishBluetooth and foundDevice which then is
+    * detected by three methods that needs to be overwrite to get the result. Each device found is then added to the list
+    * of devices i.e. a custom list that stores in the device name and bluetooth mac address of that device.*/
+
     class ExploreDevices extends AsyncTask<Void, Integer, List<BluetoothDevices>>
     {
         Boolean isActivityStarted; //boolean value that detects if the scanning started.
@@ -155,6 +159,8 @@ public class ViewDevices extends AppCompatActivity implements ComplaintPage.comp
         protected void onPostExecute(List<BluetoothDevices> bluetoothDevices) {
             Log.d("Bluetooth-tracking","Inside the Post Execute");
             Log.d("Bluetooth-tracking","Size:"+ bluetoothDevices.size());
+            //As soon as searching of devices around is finished a new async task is started
+            //that takes in the list of devices detected by this async task.
             new GetValidatedList(bluetoothDevices).execute();
             super.onPostExecute(bluetoothDevices);
         }
@@ -227,6 +233,8 @@ public class ViewDevices extends AppCompatActivity implements ComplaintPage.comp
                 String action = intent.getAction();
                 if(BluetoothDevice.ACTION_FOUND.equals(action))
                 {
+                    //If a device is found then it adds that device to a custom list that stores
+                    //name and the device mac address.
                     Log.d("Bluetooth-tracking","Device Found in interface");
                     BluetoothDevice db = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                     Log.d("Bluetooth-tracking",db.getName() +":"+ db.getAddress());
@@ -240,7 +248,9 @@ public class ViewDevices extends AppCompatActivity implements ComplaintPage.comp
 
 
 
-
+    /*This async tasks takes in the list of devices detected from previous async task and
+    * compares it to the list of devices on call from table and calls in a list adapter that
+    * populates the custom list of devices on call and around the user*/
     class GetValidatedList extends AsyncTask<String, Void, String>
     {
         List<BluetoothDevices>myDevices;
@@ -277,6 +287,7 @@ public class ViewDevices extends AppCompatActivity implements ComplaintPage.comp
             String website = "http://discoloured-pops.000webhostapp.com/GetDeviceOnCall.php";
             try
             {
+                //This is a custom connection procedure to the url
                 URL url = new URL(website);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setDoOutput(true);
@@ -284,15 +295,19 @@ public class ViewDevices extends AppCompatActivity implements ComplaintPage.comp
                 InputStream inputStream = httpURLConnection.getInputStream();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
                 String result="", line="";
+                //For each line i.e. each device echo by php
                 while((line = bufferedReader.readLine())!=null)
                 {
                     Log.d("Mac-comparison",line);
                     result += line;
+                    //Compare that one device with the list of devices nearby populated using bluetooth
                     for(int i=0; i< myDevices.size();i++)
                     {
                         Log.d("Mac-comparison",myDevices.get(i).getMacAddress());
+                        //if the mac address matches
                         if(myDevices.get(i).getMacAddress().equals(line))
                         {
+                            //store it to a custom list that stores this customised device list on call and nearby the user.
                             Log.d("Bluetooth-tracking","Inside the checking condition");
                             Log.d("Bluetooth-tracking",myDevices.get(i).getName()+myDevices.get(i).getMacAddress());
                             devicesOnCall.add(new BluetoothDevices(myDevices.get(i).getName(),myDevices.get(i).getMacAddress()));

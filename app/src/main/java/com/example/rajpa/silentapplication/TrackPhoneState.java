@@ -92,6 +92,11 @@ public class TrackPhoneState extends BroadcastReceiver {
             e.printStackTrace();
         }
     }
+
+    /*This is an async task that connects to the table on the server and updates the column of Phone State
+    * depending upon on the current state of the phone. This state then allows the application to select the
+    * devices from database that are on call and are in the vicinity to print out a custom list of devices.
+    * This async task is called on two states of phone, one is on call and one is idle.*/
     class UpdateState extends AsyncTask<String, Void, String>
     {
         Context cr;

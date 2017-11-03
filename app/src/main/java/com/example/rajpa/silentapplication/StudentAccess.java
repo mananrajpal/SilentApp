@@ -127,6 +127,9 @@ public class StudentAccess extends AppCompatActivity {
         });
         /*----------------------------------------------------------------------------------------*/
     }
+
+    /*This is an executor method which allows async task to be executed in parallel as was my requirement
+    * reference - https://stackoverflow.com/questions/18357641/is-it-possible-to-run-multiple-asynctask-in-same-time*/
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void StartAsyncTaskInParallel(CheckNudge task) {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
@@ -142,7 +145,11 @@ public class StudentAccess extends AppCompatActivity {
             task.execute();
     }
 
-
+    /*This is an async task that checks if the nudge column value has been changed to 1.
+    * When the user selects nudge the user, nudge column value gets changed from 0 to 1
+    * Which makes this thread pick up that a nudge has been received from other user
+    * about this device. The post execute method then vibrates the phone and displays a message
+    * to end the call.*/
     class CheckNudge extends AsyncTask<Void, Void, String>
     {
         String website = "http://discoloured-pops.000webhostapp.com/CheckNudge.php";
@@ -152,6 +159,7 @@ public class StudentAccess extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             Log.d("Nudge-Checking","Inside the pre-execute");
+            //vibrator object that helps us to vibrate the device for choice of time.
             v = (Vibrator) getSystemService(getApplicationContext().VIBRATOR_SERVICE);
             result="0";
         }
@@ -159,8 +167,10 @@ public class StudentAccess extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            //display a toast to user to end the call.
             Toast.makeText(getApplicationContext(),"Please End the Call, neighbour is getting disturbed", Toast.LENGTH_LONG).show();
-            v.vibrate(1500);
+            v.vibrate(1500); //vibrate the device for 1500 milli seconds.
+            //Start another async task which should run in paraller with other async task in application
             Resetnudge resetnudge = new Resetnudge();
             StartResetNudgeInParallel(resetnudge);
         }
@@ -177,10 +187,14 @@ public class StudentAccess extends AppCompatActivity {
 
         @Override
         protected String doInBackground(Void... params) {
+            //until there is no nudge
             while(result.equals("0"))
             {
                 try
                 {
+                    /*This method uses the website string to convert to an url which then is
+                    * used to open an httpurlconnection. BufferWriter is used to write on the
+                    * output stream after which to read the echo from php BufferReader is used.*/
                     Log.d("Nudge-checking","Started doInBackground the PreExecute");
                     URL url = new URL(website);
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
@@ -222,6 +236,11 @@ public class StudentAccess extends AppCompatActivity {
         }
     }
 
+    /*This async task is started by CheckNudge async task i.e. works on the logic that when a
+    * users nudges this device i.e. the nudge value changes to 1, this async task is called
+    * to reset the column back to 0 to users to nudge this device repetitively. After the value
+     * is changed to 0 this async task starts the CheckNudge task again to allow the device
+     * to be available to get the nudge again.*/
     class Resetnudge extends AsyncTask<Void, Void, String>
     {
         String website;
@@ -236,6 +255,8 @@ public class StudentAccess extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             Log.d("Nudge-checking","Inside the postexecute of ResetNudge");
+            //starts the CheckNudge async task as parallel async tasks
+            //Allowing the device to check again if any user nudged this device.
             CheckNudge checkNudge = new CheckNudge();
             StartAsyncTaskInParallel(checkNudge);
         }
@@ -254,6 +275,9 @@ public class StudentAccess extends AppCompatActivity {
         protected String doInBackground(Void... params) {
             try
             {
+                /*This method uses the website string to convert to an url which then is
+                    * used to open an httpurlconnection. BufferWriter is used to write on the
+                    * output stream after which to read the echo from php BufferReader is used.*/
                 Log.d("Nudge-checking","Inside the doInBackground of ResetNudge");
                 URL url = new URL(website);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();

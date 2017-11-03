@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 public class StaffAccess extends AppCompatActivity implements StaffLogin.loginListener {
 
-
+    //Interface overridden by the this activity
     @Override
     public void loginStaff(Boolean validated) {
 
@@ -40,6 +40,9 @@ public class StaffAccess extends AppCompatActivity implements StaffLogin.loginLi
         return super.onCreateOptionsMenu(menu);
     }
 
+    //Override method to listen the user clicks on the menu populated on the device
+    /*This section will be developed in the future allowing the staff to scan the qr generated on students device
+    * and reset the complains back to 0.*/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId())
@@ -55,6 +58,7 @@ public class StaffAccess extends AppCompatActivity implements StaffLogin.loginLi
 
     private void initializeUI()
     {
+        //Starts the fragment transaction to populate on the activity view.
         ActionBar myBar = getSupportActionBar();
         myBar.setLogo(R.drawable.silent);
         StaffLogin fragment1= new StaffLogin();

@@ -126,6 +126,9 @@ public class Access extends AppCompatActivity {
 
     }
 
+    /*This is an override method which is called when a request is displayed to the user about the system services.
+    * It's like onActivityResult but this time for request which takes in the request code and shows the appropriate
+    * message if the users accepts the request.*/
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
