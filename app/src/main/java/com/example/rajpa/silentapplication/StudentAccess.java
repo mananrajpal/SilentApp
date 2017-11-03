@@ -79,13 +79,30 @@ public class StudentAccess extends AppCompatActivity {
         scanDevices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent myIntent = new Intent (getApplicationContext(), ViewDevices.class);
-                startActivity(myIntent);
+                CheckInternetState checkInternetState = new CheckInternetState(view);
+                if(checkInternetState.getSate()==true) {
+                    Intent myIntent = new Intent(getApplicationContext(), ViewDevices.class);
+                    startActivity(myIntent);
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(),
+                            "Please connect to the Internet",Toast.LENGTH_LONG).show();
+                }
             }
         });
         challenge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                CheckInternetState checkInternetState = new CheckInternetState(view);
+                if(checkInternetState.getSate()==true) {
+
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(),
+                            "Please connect to the Internet",Toast.LENGTH_LONG).show();
+                }
 
             }
         });

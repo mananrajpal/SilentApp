@@ -1,6 +1,7 @@
 package com.example.rajpa.silentapplication;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,11 +29,12 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.List;
+import java.util.UUID;
 
 
 public class ComplaintPage extends Fragment {
-
     List<BluetoothDevices> listOfDevices;
     complaintListener mListener;
     Integer listPosition;
@@ -68,7 +71,8 @@ public class ComplaintPage extends Fragment {
         nudgeDevice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                NudgeDevice nudgeDevice = new NudgeDevice();
+                nudgeDevice.execute();
             }
         });
         reportDevice.setOnClickListener(new View.OnClickListener() {
@@ -96,6 +100,85 @@ public class ComplaintPage extends Fragment {
 
     }
 
+    class NudgeDevice extends AsyncTask<Void, Void, String>
+    {
+        private ProgressBar progressBar;
+        String website = "http://discoloured-pops.000webhostapp.com/NudgeDevice.php";
+        @Override
+        protected void onPreExecute() {
+            Log.d("Nudge-checking","Entered the PreExecute");
+            progressBar = (ProgressBar) getActivity().findViewById(R.id.nudgeBar);
+            progressBar.setVisibility(View.VISIBLE);
+            Log.d("Nudge-checking","Complete the PreExecute");
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Log.d("Nudge-checking","Started PostExecute the PreExecute");
+            progressBar.setVisibility(View.INVISIBLE);
+            if(s.equals("Success"))
+            {
+                Toast.makeText(getActivity(),"Successfully Nudged",Toast.LENGTH_LONG).show();
+            }
+            else
+            {
+                Toast.makeText(getActivity(),"Something Wrong with application",Toast.LENGTH_LONG).show();
+            }
+            Log.d("Nudge-checking","Completed PostExecute the PreExecute");
+
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            try
+            {
+                Log.d("Nudge-checking","Started doInBackground the PreExecute");
+                URL url = new URL(website);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.setDoOutput(true);
+                OutputStream outputStream  = httpURLConnection.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                String post_data = URLEncoder.encode("deviceId","UTF-8")+"=" +
+                        URLEncoder.encode(listOfDevices.get(listPosition).getMacAddress(),"UTF-8");
+                bufferedWriter.write(post_data);
+                bufferedWriter.flush();
+                outputStream.close();
+                bufferedWriter.close();
+                InputStream inputStream = httpURLConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream,"iso-8859-1"));
+                String line="", result="";
+                while((line = bufferedReader.readLine())!=null)
+                {
+                    result += line;
+                }
+                inputStream.close();
+                bufferedReader.close();
+                httpURLConnection.disconnect();
+                return result;
+            }catch (MalformedURLException e)
+            {
+                e.printStackTrace();
+            }catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+    }
     class ReportWorker extends AsyncTask<Void,Void,String>
     {
         View view;
