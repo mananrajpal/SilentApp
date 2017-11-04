@@ -33,9 +33,12 @@ import java.util.List;
 
 public class ViewDevices extends AppCompatActivity implements ComplaintPage.complaintListener{
     Integer REQUEST_ENABLE_BT = 1;
+    public enum ViewActivityStatus {Running, Terminated, CompletedScanning};
     BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     ArrayList<BluetoothDevices> listBluetoothDevices = new ArrayList<BluetoothDevices>();
     List<BluetoothDevices>devicesOnCall = new ArrayList<BluetoothDevices>();
+    Boolean isActivityFinsihed;//condition to keep the background part keep running until listener reports Scanning finished
+    ViewActivityStatus a;
 
     DevicesListAdapter adapter;
 
@@ -52,6 +55,17 @@ public class ViewDevices extends AppCompatActivity implements ComplaintPage.comp
         Toolbar myToolbar = (Toolbar)findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         initializeUI();
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        Log.d("Bluetooth-tracking","Inside on the onDestroy");
+        ExploreDevices ex = new ExploreDevices();
+        ex.onCancelled();
+        a = ViewActivityStatus.Terminated;
+        isActivityFinsihed = true;
     }
 
     private void initializeUI()
@@ -118,7 +132,6 @@ public class ViewDevices extends AppCompatActivity implements ComplaintPage.comp
     class ExploreDevices extends AsyncTask<Void, Integer, List<BluetoothDevices>>
     {
         Boolean isActivityStarted; //boolean value that detects if the scanning started.
-        Boolean isActivityFinsihed;//condition to keep the background part keep running until listener reports Scanning finished
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -127,6 +140,7 @@ public class ViewDevices extends AppCompatActivity implements ComplaintPage.comp
             Log.d("Bluetooth-tracking","Inside onPreExecute");
             isActivityStarted = false;
             isActivityFinsihed= false;
+            a = ViewActivityStatus.Running;
             if(mBluetoothAdapter.isDiscovering())
             {
                 /*This condition checks if the bluetooth device was already in discovery mode,
@@ -147,11 +161,17 @@ public class ViewDevices extends AppCompatActivity implements ComplaintPage.comp
             {
                 Log.d("Bluetooth-tracking","Inside the else condition of discovering");
                 IntentFilter startAction = new IntentFilter(mBluetoothAdapter.ACTION_DISCOVERY_STARTED);
+                Log.d("Bluetooth-tracking","Intent created for started");
                 IntentFilter finishAction = new IntentFilter(mBluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+                Log.d("Bluetooth-tracking","Intent created for finished");
                 IntentFilter deviceFound = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+                Log.d("Bluetooth-tracking","Intent created for found");
                 registerReceiver(actionStarted, startAction);
+                Log.d("Bluetooth-tracking","Registered started intent");
                 registerReceiver(actionFinished, finishAction);
+                Log.d("Bluetooth-tracking","Registered finished intent");
                 registerReceiver(deviceFoundAction, deviceFound);
+                Log.d("Bluetooth-tracking","Registered device found intent");
             }
         }
 
@@ -172,7 +192,15 @@ public class ViewDevices extends AppCompatActivity implements ComplaintPage.comp
         }
 
         @Override
-        protected List<BluetoothDevices> doInBackground(Void... params) {
+        protected void onCancelled() {
+            super.onCancelled();
+            Log.d("Bluetooth-tracking","Inside on Cancelled");
+            mBluetoothAdapter.cancelDiscovery();
+        }
+
+        @Override
+        protected List<BluetoothDevices> doInBackground(Void... params)
+        {
             Log.d("Bluetooth-tracking","Inside background override before starting discovery");
             //startDiscovery is an async method that put the device is discoverable mode and looks
             //for other devices to get their name and MAC address.
@@ -185,11 +213,18 @@ public class ViewDevices extends AppCompatActivity implements ComplaintPage.comp
             * takes it to the post method.*/
             while(isActivityFinsihed == false)
             {
-                if(isActivityStarted)
+                Log.d("Checking-loop","Inside the loop");
+                try
                 {
-                   // publishProgress(listBluetoothDevices.size());
+                    Thread.sleep(1000);
+                }catch (InterruptedException e)
+                {
+                    e.printStackTrace();
                 }
+                if(a==ViewActivityStatus.Terminated)
+                break;
             }
+
             if(isActivityFinsihed)
             {
                 Log.d("Bluetooth-tracking","Inside the background if activity finished");
@@ -220,6 +255,7 @@ public class ViewDevices extends AppCompatActivity implements ComplaintPage.comp
                 String action = intent.getAction();
                 if(mBluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action))
                 {
+                    a = ViewActivityStatus.CompletedScanning;
                     isActivityFinsihed = true;
                     Log.d("Bluetooth-tracking","Search finished in interface");
                 }
@@ -263,6 +299,7 @@ public class ViewDevices extends AppCompatActivity implements ComplaintPage.comp
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            Log.d("Bluetooth-tracking","Inside the preexecute of getlist");
         }
 
         @Override

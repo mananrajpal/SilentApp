@@ -113,6 +113,8 @@ public class StudentAccess extends AppCompatActivity {
             public void onClick(View view) {
                 CheckInternetState checkInternetState = new CheckInternetState(view);
                 if(checkInternetState.getSate()==true) {
+                    Intent challenge = new Intent(getApplicationContext(), Challenge.class);
+                    startActivity(challenge);
 
                 }
                 else

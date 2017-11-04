@@ -14,7 +14,8 @@
         android:popupTheme="@style/Theme.AppCompat.Light"/>
 
     <TableRow android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingTop="100dp">
         <ImageView
             android:layout_height="wrap_content"
             android:layout_width="0dp"
@@ -26,11 +27,11 @@
             android:layout_weight="2"
             android:id="@+id/takeChallenge"
             android:text="@string/takeChallenge"
-            android:textSize="20sp"
-            android:textStyle="bold"/>
+            style="@style/Label"/>
     </TableRow>
     <TableRow android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp">
         <ImageView
             android:layout_height="wrap_content"
             android:layout_width="0dp"
@@ -42,19 +43,7 @@
             android:layout_weight="2"
             android:id="@+id/viewScore"
             android:text="@string/viewScore"
-            android:textSize="20sp"
-            android:textStyle="bold"/>
+            style="@style/Label"/>
     </TableRow>
-    <EditText
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:id="@+id/myAnswer"
-        android:paddingTop="20dp"/>
-    <Button android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/SubmitAnswer"
-        android:text="@string/SubmitAnswer"
-        android:layout_marginLeft="150dp"
-        android:layout_marginTop="20dp"/>
 
 </TableLayout>
