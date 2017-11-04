@@ -273,7 +273,7 @@ public class ViewDevices extends AppCompatActivity implements ComplaintPage.comp
             DevicesListAdapter adapter = new DevicesListAdapter(getApplicationContext(), devicesOnCall);
             //sets the adapter to the defined list view.
             myList.setAdapter(adapter);
-            Log.d("Bluetooth-tracking", s);
+            //Log.d("Bluetooth-tracking", s);
 
         }
 

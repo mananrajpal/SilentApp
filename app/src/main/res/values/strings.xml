@@ -24,6 +24,13 @@
     <string name="reportDevice">Report the Device</string>
     <string name="reportText">Actions Available-</string>
 
+
+    <!--Challenge Page Strings-->
+    <string name="SubmitAnswer">Submit</string>
+    <string name="takeChallenge">Take Challenge</string>
+    <string name="viewScore">View Score</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_challenge">Challenge</string>
 </resources>
