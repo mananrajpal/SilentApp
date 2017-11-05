@@ -50,7 +50,8 @@
         <activity
             android:name=".Challenge"
             android:label="@string/title_activity_challenge"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".ChallengeFragments"></activity>
     </application>
 
 </manifest>

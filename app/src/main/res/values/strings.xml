@@ -26,9 +26,13 @@
 
 
     <!--Challenge Page Strings-->
-    <string name="SubmitAnswer">Submit</string>
     <string name="takeChallenge">Take Challenge</string>
     <string name="viewScore">View Score</string>
+
+    <!--Take Challenge Fragment Strings-->
+    <string name="answerHint">Answer here.</string>
+    <string name="SubmitAnswer">Submit</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

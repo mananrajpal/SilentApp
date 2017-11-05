@@ -76,6 +76,8 @@ public class createQR extends AppCompatActivity {
         TextView idHolder = (TextView)findViewById(R.id.deviceId);
         /*----------------------------------------------------------------------------------------*/
         myActionBar.setLogo(R.drawable.silent); //setting up the logo on ActionBar
+        myActionBar.setDisplayShowTitleEnabled(true);
+        myActionBar.setTitle("Silent Application");
         androidId = getAndroidId();
         idHolder.setText(androidId);
         createQR();
