@@ -1,0 +1,79 @@
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp">
+    <ImageView
+        android:src="@drawable/steps"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"/>
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="50dp">
+        <ImageView
+            android:src="@drawable/circle"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"/>
+        <TextView
+            android:layout_weight="3"
+            android:text="@string/loadScore"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="@style/Label"/>
+        <TextView
+            android:id="@+id/yourScore"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            style="@style/Label"/>
+
+        <ProgressBar
+            android:id="@+id/scoreProgressBar"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:visibility="invisible" />
+    </TableRow>
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="50dp">
+        <ImageView
+            android:src="@drawable/circle"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"/>
+        <TextView
+            android:layout_weight="3"
+            android:text="@string/maxScore"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="@style/Label"/>
+        <TextView
+            android:id="@+id/maxScore"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            style="@style/Label"/>
+
+        <ProgressBar
+            android:id="@+id/maxScoreProgressBar"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:visibility="invisible" />
+    </TableRow>
+
+
+</TableLayout>

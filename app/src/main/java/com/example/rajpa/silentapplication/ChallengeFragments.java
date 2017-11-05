@@ -30,18 +30,23 @@ public class ChallengeFragments extends AppCompatActivity {
         //
         Bundle bundle = getIntent().getExtras();
         String viewType = bundle.getString("View");
-        Log.d("Store-question",viewType);
+        Log.d("Bundle-data",viewType);
 
         if(viewType.equals("take-challenge"))
         {
+            Log.d("Bundle-data","Inside the take challenge if condition");
             TakeChallenge takeChallenge = new TakeChallenge();
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragmentView, takeChallenge);
             fragmentTransaction.commit();
         }
-        if(viewType.equals("view-score"));
+        else if(viewType.equals("view-score"))
         {
-
+            Log.d("Bundle-data","Inside the score if condition");
+            GetScore getScore = new GetScore();
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragmentView, getScore);
+            fragmentTransaction.commit();
         }
     }
 

@@ -45,11 +45,17 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:paddingTop="30dp"
-        android:paddingLeft="150dp">
+        android:paddingLeft="130dp">
         <Button
             android:id="@+id/submitLogin"
             android:text="@string/LoginButton"
             android:textSize="20sp"
             android:textStyle="bold"/>
+        <ProgressBar
+            android:id="@+id/loginProgress"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"/>
     </TableRow>
 </TableLayout>

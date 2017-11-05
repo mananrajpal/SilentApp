@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -125,12 +126,12 @@ public class StaffLogin extends Fragment
 
     /*Database is created as a local host not on a webserver which is why the url is set to static
     * local host address.*/
-
-
-
+        ProgressBar progressBar;
         String login_url = "http://discoloured-pops.000webhostapp.com/login.php";
         @Override
         protected void onPreExecute() {
+            progressBar = (ProgressBar) getActivity().findViewById(R.id.loginProgress);
+            progressBar.setVisibility(View.VISIBLE);
             super.onPreExecute();
         }
 
@@ -138,6 +139,7 @@ public class StaffLogin extends Fragment
         protected void onPostExecute(String aVoid) {
             super.onPostExecute(aVoid);
             String access = aVoid.substring(0,7);
+            progressBar.setVisibility(View.INVISIBLE);
             Log.d("Checking-connection","Inside the post executed");
             if(access.equals("Welcome"))
             {

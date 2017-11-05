@@ -33,6 +33,11 @@
     <string name="answerHint">Answer here.</string>
     <string name="SubmitAnswer">Submit</string>
 
+    <!--Get Score Fragment Strings-->
+    <string name="loadScore">Your score: </string>
+    <string name="maxScore">High Score: </string>
+
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

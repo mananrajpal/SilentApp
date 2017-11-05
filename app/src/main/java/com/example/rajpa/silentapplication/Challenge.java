@@ -47,6 +47,7 @@ public class Challenge extends AppCompatActivity {
         takeChallenge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("Bundle-data","Inside the take challenge intent");
                 Intent challenge = new Intent(getApplicationContext(), ChallengeFragments.class);
                 challenge.putExtra("View","take-challenge");
                 startActivity(challenge);
@@ -57,9 +58,10 @@ public class Challenge extends AppCompatActivity {
         viewScore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent challenge = new Intent(getApplicationContext(), ChallengeFragments.class);
-                challenge.putExtra("View","view-score");
-                startActivity(challenge);
+                Log.d("Bundle-data","Inside the score intent");
+                Intent score = new Intent(getApplicationContext(), ChallengeFragments.class);
+                score.putExtra("View","view-score");
+                startActivity(score);
             }
         });
     }
