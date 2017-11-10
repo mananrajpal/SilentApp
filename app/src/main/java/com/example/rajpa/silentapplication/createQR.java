@@ -1,7 +1,9 @@
 package com.example.rajpa.silentapplication;
 
 import android.annotation.TargetApi;
+import android.app.admin.DevicePolicyManager;
 import android.bluetooth.BluetoothAdapter;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.wifi.WifiInfo;
@@ -10,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -89,11 +92,15 @@ public class createQR extends AppCompatActivity {
     private String getAndroidId()
     {
         String id;
-        WifiManager manager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        WifiInfo info = manager.getConnectionInfo();
-        //id = info.getMacAddress();
-        id = mAdapter.getAddress();
-        //Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        //If the phone does not support bluetooth it prevents the application from crashing by initialising id to default id
+        if(mAdapter == null)
+        {
+            id = "00:00:00:00:00";
+        }
+        else
+        {
+            id = mAdapter.getAddress();
+        }
         return id;
     }
 
@@ -279,7 +286,7 @@ public class createQR extends AppCompatActivity {
                     OutputStream outputStream  = httpURLConnection.getOutputStream();
                     BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
                     String post_data = URLEncoder.encode("deviceId","UTF-8")+"=" +
-                            URLEncoder.encode(mAdapter.getAddress(),"UTF-8");
+                            URLEncoder.encode(androidId,"UTF-8");
                     bufferedWriter.write(post_data);
                     bufferedWriter.flush();
                     outputStream.close();
@@ -362,7 +369,7 @@ public class createQR extends AppCompatActivity {
                 OutputStream outputStream = httpURLConnection.getOutputStream();
                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
                 String post_data = URLEncoder.encode("deviceId","UTF-8")+"=" +
-                        URLEncoder.encode(mAdapter.getAddress(),"UTF-8");
+                        URLEncoder.encode(androidId,"UTF-8");
                 bufferedWriter.write(post_data);
                 bufferedWriter.flush();
                 outputStream.close();

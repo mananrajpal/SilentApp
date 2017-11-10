@@ -20,19 +20,19 @@
         android:roundIcon="@drawable/silent"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".Access">
+        <activity android:name=".Access" android:configChanges="orientation" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".StudentAccess" />
+        <activity android:name=".StudentAccess" android:configChanges="orientation" android:screenOrientation="portrait" />
         <activity
             android:name=".createQR"
             android:label="@string/title_activity_create_qr"
             android:parentActivityName=".StudentAccess"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:configChanges="orientation" android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.rajpa.silentapplication.StudentAccess" />
@@ -45,12 +45,13 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".ViewDevices" />
-        <activity android:name=".StaffAccess" />
+        <activity android:name=".ViewDevices" android:configChanges="orientation" android:screenOrientation="portrait"/>
+        <activity android:name=".StaffAccess" android:configChanges="orientation" android:screenOrientation="portrait" />
         <activity
             android:name=".Challenge"
             android:label="@string/title_activity_challenge"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:configChanges="orientation" android:screenOrientation="portrait"/>
         <activity android:name=".ChallengeFragments"></activity>
     </application>
 

@@ -27,7 +27,9 @@ public class ChallengeFragments extends AppCompatActivity {
         actionBar.setLogo(R.drawable.silent);
         actionBar.setTitle("Silent Application");
 
-        //
+        /*This activity is started from the Challenge Activity and the fragments in this activity are loaded
+        * based upon the string passed from previous activity. Each text view which has a onClickListener passes
+        * a separate string that decides the fragment being loaded in this activity.*/
         Bundle bundle = getIntent().getExtras();
         String viewType = bundle.getString("View");
         Log.d("Bundle-data",viewType);

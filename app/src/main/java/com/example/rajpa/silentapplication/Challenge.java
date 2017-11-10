@@ -43,6 +43,9 @@ public class Challenge extends AppCompatActivity {
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle("Silent Application");
 
+
+        /*The text views starts a new activity which has one layout that acts as a placeholder for fragments.
+        * Fragments are loaded on the bases of string passed from this activity in Intents.*/
         TextView takeChallenge = (TextView) findViewById(R.id.takeChallenge);
         takeChallenge.setOnClickListener(new View.OnClickListener() {
             @Override

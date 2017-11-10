@@ -104,7 +104,7 @@ public class Access extends AppCompatActivity {
         {
             //do nothing
         }
-        /*------------------this condition checks for getting acces to Internet------------------*/
+        /*------------------this condition checks for getting access to Internet------------------*/
         if(ContextCompat.checkSelfPermission(Access.this, Manifest.permission.INTERNET)
                 !=PackageManager.PERMISSION_GRANTED)
         {
@@ -115,6 +115,32 @@ public class Access extends AppCompatActivity {
             else
             {
                 ActivityCompat.requestPermissions(Access.this, new String[]{Manifest.permission.INTERNET},3);
+            }
+
+        }
+        if(ContextCompat.checkSelfPermission(Access.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                !=PackageManager.PERMISSION_GRANTED)
+        {
+            if(ActivityCompat.shouldShowRequestPermissionRationale(Access.this, Manifest.permission.ACCESS_FINE_LOCATION))
+            {
+                ActivityCompat.requestPermissions(Access.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},4);
+            }
+            else
+            {
+                ActivityCompat.requestPermissions(Access.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},4);
+            }
+
+        }
+        if(ContextCompat.checkSelfPermission(Access.this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                !=PackageManager.PERMISSION_GRANTED)
+        {
+            if(ActivityCompat.shouldShowRequestPermissionRationale(Access.this, Manifest.permission.ACCESS_COARSE_LOCATION))
+            {
+                ActivityCompat.requestPermissions(Access.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},5);
+            }
+            else
+            {
+                ActivityCompat.requestPermissions(Access.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},5);
             }
 
         }
@@ -149,7 +175,7 @@ public class Access extends AppCompatActivity {
                 }
                 break;
             case 2:
-                if(grantResults.length>0 && grantResults[2]==PackageManager.PERMISSION_GRANTED)
+                if(grantResults.length>0 && grantResults[1]==PackageManager.PERMISSION_GRANTED)
                 {
                     if(ContextCompat.checkSelfPermission(Access.this, Manifest.permission.PROCESS_OUTGOING_CALLS)
                             ==PackageManager.PERMISSION_GRANTED)
@@ -159,7 +185,7 @@ public class Access extends AppCompatActivity {
                 }
                 break;
             case 3:
-                if(grantResults.length>0 && grantResults[3]==PackageManager.PERMISSION_GRANTED)
+                if(grantResults.length>0 && grantResults[2]==PackageManager.PERMISSION_GRANTED)
                 {
                     if(ContextCompat.checkSelfPermission(Access.this, Manifest.permission.INTERNET)
                             ==PackageManager.PERMISSION_GRANTED)
@@ -168,7 +194,6 @@ public class Access extends AppCompatActivity {
                     }
                 }
                 break;
-
         }
     }
 }
